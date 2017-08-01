@@ -2,13 +2,26 @@
 
 const BB_LEFT_OFFSET = 13, BB_RIGHT_OFFSET = BB_LEFT_OFFSET;
 const BB_TOP_OFFSET = 11, BB_BOTTOM_OFFSET = 3;
-const JUMP_FORCE = 1000, GRAVITY = 90.81 * 0.7;
+const JUMP_FORCE = 300, GRAVITY = 50;
+const MAX_VERTICAL_ACCELERATION = 100;
+const MIN_VERTICAL_ACCELERATION = -MAX_VERTICAL_ACCELERATION;
+const HORIZONTAL_ACCELERATION_INCREMENT = 10;
+const HORIZONTAL_RATIO_DECREMENT = 0.85;
+const MAX_HORIZONTAL_ACCELERATION = 30;
+const MIN_HORIZONTAL_ACCELERATION = -MAX_HORIZONTAL_ACCELERATION;
+const FLOOR_FRICTION = 0.6;
+const MAX_HORIZONTAL_VELOCITY = 10;
+const MIN_HORIZONTAL_VELOCITY = -MAX_HORIZONTAL_VELOCITY;
+const MAX_VERTICAL_VELOCITY = 10;
+const MIN_VERTICAL_VELOCITY = -MAX_VERTICAL_VELOCITY;
 
 function Warrior(name = "Warrior") {
 	this.name = name;
 
+
 	this.position = new Vector2();
 	this.velocity = new Vector2();
+	this.acceleration = new Vector2();
 	this.size = new Vector2();
 	this.speed = 300;
 	this.verticalForce = 0;
@@ -28,34 +41,68 @@ function Warrior(name = "Warrior") {
 	this.keys = 0;
 
 	this.move = function(deltaTime) {
-		if (this.isGrounded) {
-			this.verticalForce = 0;
-		}
-		else {
-			this.verticalForce -= GRAVITY;
-		}
-
-		this.velocity = new Vector2();
+		this.acceleration.y += GRAVITY;
 
 		if (this.isMovingLeft) {
-			this.velocity.x = -this.speed;
+			this.acceleration.x -= HORIZONTAL_ACCELERATION_INCREMENT * deltaTime;
 		}
 		else if(this.isMovingRight) {
-			this.velocity.x = this.speed;
+			this.acceleration.x += HORIZONTAL_ACCELERATION_INCREMENT * deltaTime;
+		}
+		else {
+			this.acceleration.x *= HORIZONTAL_RATIO_DECREMENT;
+
+			if (Math.abs(this.acceleration.x) < 0.1) {
+				this.acceleration.x = 0;
+			}
 		}
 
 		if (this.isJumping) {
 			if(this.isGrounded) {
 				this.isGrounded = false;
-				this.verticalForce = JUMP_FORCE;
+				this.acceleration.y = -JUMP_FORCE;
+			}
+			else {
+				this.acceleration.y = 0;
 			}
 		}
 
-		this.velocity.y -= this.verticalForce;
-		this.velocity.scale(deltaTime);
+		this.acceleration.x = clamp(this.acceleration.x,
+																MIN_HORIZONTAL_ACCELERATION,
+																MAX_HORIZONTAL_ACCELERATION);
+		console.log("acceleration.x: ", this.acceleration.x);
+		this.acceleration.y = clamp(this.acceleration.y,
+																MIN_VERTICAL_ACCELERATION,
+																MAX_VERTICAL_ACCELERATION);
+
+		if(Math.abs(this.acceleration.y) < 0.1) {
+			this.acceleration.y = 0;
+		}
+		console.log("acceleration.y: ", this.acceleration.y);
+
+
+		this.velocity.x += this.acceleration.x;
+		this.velocity.y += this.acceleration.y;
+
+		if (Math.abs(this.velocity.x) < 0.1) {
+			this.velocity.x = 0;
+		}
+		if (Math.abs(this.velocity.y) < 0.1) {
+			this.velocity.y = 0;
+		}
+
+		if(this.isGrounded) {
+			this.velocity.x *= FLOOR_FRICTION;
+		}
+
+		this.velocity.x = clamp(this.velocity.x, MIN_HORIZONTAL_VELOCITY,
+			MAX_HORIZONTAL_VELOCITY);
+		this.velocity.y = clamp(this.velocity.y, MIN_VERTICAL_VELOCITY,
+				MAX_VERTICAL_VELOCITY);
 
 		this.handleWorldCollision();
 
+		console.log("velocity: ", this.velocity);
 		this.position = this.position.add(this.velocity);
 	};
 

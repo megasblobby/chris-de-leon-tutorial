@@ -29,11 +29,7 @@ Camera.prototype.update = function(deltaTime) {
 	let fromFocusCenterToTarget = this.position.subtract(this.target.position);
 
 	if (this.target.position.x < x || this.target.position.x > focusCenter.x + FOCUS_WIDTH / 2 || this.target.position.y < y || this.target.position.y > focusCenter.y + FOCUS_HEIGHT / 2) {
-		let translation = fromFocusCenterToTarget.normalized();
-		translation.scale(this.translationSpeed);
-		translation.scale(deltaTime);
-
-		this.position = this.position.subtract(translation);
+		this.position.increment(this.target.velocity);
 	}
 };
 
