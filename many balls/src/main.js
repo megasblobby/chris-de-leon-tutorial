@@ -66,7 +66,7 @@ function getRandomSpeed(minSpeed, maxSpeed) {
 
 function getRandomPosition() {
 	let randomPosition = new Vector2();
-	
+	let gridCell = null;
 	do {
 		randomPosition.x = Math.floor(Math.random() * WIDTH);
 		randomPosition.y = Math.floor(Math.random() * HEIGHT);
