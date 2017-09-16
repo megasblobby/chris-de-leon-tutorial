@@ -10,19 +10,19 @@ let engine;
 let scenes = new Array();
 let currentScenes = new Array();
 let alien;
+let player;
 
 window.onload = function () {
-	canvas = document.getElementById("gameCanvas");
+	/*canvas = document.getElementById("gameCanvas");
 	canvasContext = canvas.getContext("2d");
 
 	WIDTH = canvas.width;
-	HEIGHT = canvas.height;
+	HEIGHT = canvas.height;*/
 
 	engine = new Engine();
 	engine.update = update.bind(this);
 	engine.render = render.bind(this);
 
-	alien = new Alien(canvasContext);
 	//engine.init();
 
 	/*let sceneLoader = new SceneLoader();
@@ -31,22 +31,31 @@ window.onload = function () {
 
 	drawColoredRect(0, 0, WIDTH, HEIGHT, "black");
 	drawColoredText("LOADING", WIDTH / 2, HEIGHT / 2, "white");*/
+	alien = new Alien(engine.canvasContext);
+	player = new Player(engine.canvasContext);
+	engine.inputManager.observable.register("mouse-left-down", player);
+	engine.inputManager.observable.register("key-pressed", player);
+	engine.inputManager.observable.register("key-released", player);
+
 	engine.loop();
+	//engine.inputManager.observable.register("mouse-left-down", player);
 }
 
 function update(deltaTime) {
 	alien.update(deltaTime);
+	player.update(deltaTime);
 }
 
 function render(deltaTime) {
 	clear();
 
 	alien.render(deltaTime);
+	player.render(deltaTime);
 }
 
 function clear() {
-	canvasContext.fillStyle = "black";
-	canvasContext.fillRect(0, 0, WIDTH, HEIGHT);
+	engine.canvasContext.fillStyle = "black";
+	engine.canvasContext.fillRect(0, 0, engine.WIDTH, engine.HEIGHT);
 }
 
 function onNotify(subject, object){
