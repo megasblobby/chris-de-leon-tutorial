@@ -11,6 +11,7 @@ let scenes = new Array();
 let currentScenes = new Array();
 let alien;
 let player;
+let entities = new Array();
 
 window.onload = function () {
 	/*canvas = document.getElementById("gameCanvas");
@@ -33,24 +34,30 @@ window.onload = function () {
 	drawColoredText("LOADING", WIDTH / 2, HEIGHT / 2, "white");*/
 	alien = new Alien(engine.canvasContext);
 	player = new Player(engine.canvasContext);
+	player.observable.register("spawn-entity", this);
+	entities.push(alien);
+	entities.push(player);
+
 	engine.inputManager.observable.register("mouse-left-down", player);
 	engine.inputManager.observable.register("key-pressed", player);
 	engine.inputManager.observable.register("key-released", player);
 
 	engine.loop();
-	//engine.inputManager.observable.register("mouse-left-down", player);
+
 }
 
 function update(deltaTime) {
-	alien.update(deltaTime);
-	player.update(deltaTime);
+	for (let entity of entities) {
+		entity.update(deltaTime);
+	}
 }
 
 function render(deltaTime) {
 	clear();
 
-	alien.render(deltaTime);
-	player.render(deltaTime);
+	for (let entity of entities) {
+		entity.render(deltaTime);
+	}
 }
 
 function clear() {
@@ -59,9 +66,7 @@ function clear() {
 }
 
 function onNotify(subject, object){
-	/*if (subject === "scenes-all-loaded") {
-		scenes = object;
-		currentScenes.push(scenes[0]);
-		console.log("SCENE PRONTE");
-		engine.loop();*/
+	if (subject === "spawn-entity") {
+		entities.push(object);
 	}
+}

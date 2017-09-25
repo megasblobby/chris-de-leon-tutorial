@@ -4,6 +4,7 @@ class Entity {
   constructor(components = new Map(), renderer = null) {
     this.components = components;
     this.renderer = renderer;
+    this.observable = new Observable();
   }
 
   update(deltaTime) {
