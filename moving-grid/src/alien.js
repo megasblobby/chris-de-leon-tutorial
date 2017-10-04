@@ -1,14 +1,14 @@
 "use strict"
 
 class Alien extends Entity {
-  constructor(canvasContext) {
+  constructor(canvasContext, position, velocity) {
     super();
+    this.position = position;
+    this.velocity = velocity;
 
-    let position = new Vector2(20, 100);
     let minPosition = new Vector2(10, 100);
     let maxPosition = new Vector2(100, 100);
-    let velocity = new Vector2(100, 0);
-    let sizes = new Vector2(20, 20);
+    let sizes = new Vector2(40, 40);
     let color = "red";
 
     this.movementManager = new LoopMovement(position, minPosition, maxPosition,
