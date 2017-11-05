@@ -60,180 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function register(subject, observer) {
-  this._validate(subject, "subject");
-  this._validate(observer, "observer");
-
-  if (this.subjects.has(subject) === false) {
-    this.subjects.set(subject, new Array());
-  }
-  this.subjects.get(subject).push(observer);
-}
-
-function notify(subject) {
-  var object = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-  this._validate(subject, "subject");
-
-  if (this._subjects.has(subject)) {
-    var observers = this.subjects.get(subject);
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      for (var _iterator = observers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var observer = _step.value;
-
-        observer.onNotify(subject, object);
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-  } else {
-    console.warn("Subject " + subject + " is not a registered subject!");
-  }
-}
-
-/*function validate(target, key, descriptor) {
-  let _arguments = [...descriptor.value];
-  for (let arguments of _arguments) {
-    if (target === null || typeof target === "undefined") {
-      let errorMessage = `${name} can not be ${target}!`;
-      throw errorMessage;
-    }
-  }
-}*/
-
-var Observable = function () {
-  function Observable() {
-    _classCallCheck(this, Observable);
-
-    this._subjects = new Map();
-
-    this.register = register.bind(this);
-    this.notify = notify.bind(this);
-  }
-
-  _createClass(Observable, [{
-    key: "_validate",
-    value: function _validate(target, name) {
-      if (target === null || typeof target === "undefined") {
-        var errorMessage = name + " can not be " + target + "!";
-        throw errorMessage;
-      }
-
-      return target;
-    }
-  }, {
-    key: "subjects",
-    set: function set(subjects) {
-      this._subjects = this._validate(subjects, "subjects");
-    },
-    get: function get() {
-      return this._subjects;
-    }
-  }]);
-
-  return Observable;
-}();
-
-exports.default = Observable;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-function validateNullUndifined(target, name, descriptor) {
-  var original = descriptor.value;
-  if (typeof original === 'function') {
-    descriptor.value = function () {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      for (var index = 0; index < args.length; index++) {
-        if (args[index] === null || typeof args[index] === 'undefined') {
-          var error = new TypeError('Argument #' + (index + 1) + ' of function ' + name + ' is: ' + args[index]);
-
-          console.error(name + ': ' + args);
-          console.error(error);
-
-          throw error;
-        }
-      }
-      var result = original.apply(this, args);
-      return result;
-    };
-  }
-  return descriptor;
-}
-
-function validateEmptyString(target, name, descriptor) {
-  var original = descriptor.value;
-  if (typeof original === 'function') {
-    descriptor.value = function () {
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      for (var index = 0; index < args.length; index++) {
-        if (args[index] === '') {
-          var error = new TypeError('Argument #' + (index + 1) + ' of function ' + name + ' is an empty string');
-
-          console.error(name + ': ' + args);
-          console.error(error);
-
-          throw error;
-        }
-      }
-      var result = original.apply(this, args);
-      return result;
-    };
-  }
-  return descriptor;
-}
-
-exports.validateNullUndifined = validateNullUndifined;
-exports.validateEmptyString = validateEmptyString;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -348,7 +179,7 @@ var Vector2 = function () {
 exports.default = Vector2;
 
 /***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -361,15 +192,15 @@ exports.engine = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assetManager = __webpack_require__(6);
+var _assetManager = __webpack_require__(7);
 
 var _assetManager2 = _interopRequireDefault(_assetManager);
 
-var _inputManager = __webpack_require__(9);
+var _inputManager = __webpack_require__(10);
 
 var _inputManager2 = _interopRequireDefault(_inputManager);
 
-var _entitiesManager = __webpack_require__(13);
+var _entitiesManager = __webpack_require__(11);
 
 var _entitiesManager2 = _interopRequireDefault(_entitiesManager);
 
@@ -535,14 +366,14 @@ var Engine = function () {
       return this._canvas;
     }
   }, {
-    key: "inputManager",
-    get: function get() {
-      return this._inputManager;
-    }
-  }, {
     key: "canvasContext",
     get: function get() {
       return this._canvasContext;
+    }
+  }, {
+    key: "inputManager",
+    get: function get() {
+      return this._inputManager;
     }
   }, {
     key: "assetManager",
@@ -562,26 +393,309 @@ var Engine = function () {
 var engine = exports.engine = new Engine();
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(5);
-
-
-/***/ }),
-/* 5 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _engine = __webpack_require__(3);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _vector = __webpack_require__(2);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function register(subject, observer) {
+  this._validate(subject, "subject");
+  this._validate(observer, "observer");
+
+  if (this.subjects.has(subject) === false) {
+    this.subjects.set(subject, new Array());
+  }
+  this.subjects.get(subject).push(observer);
+}
+
+function notify(subject) {
+  var object = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+  this._validate(subject, "subject");
+
+  if (this._subjects.has(subject)) {
+    var observers = this.subjects.get(subject);
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = observers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var observer = _step.value;
+
+        observer.onNotify(subject, object);
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  } else {
+    console.warn("Subject " + subject + " is not a registered subject!");
+  }
+}
+
+/*function validate(target, key, descriptor) {
+  let _arguments = [...descriptor.value];
+  for (let arguments of _arguments) {
+    if (target === null || typeof target === "undefined") {
+      let errorMessage = `${name} can not be ${target}!`;
+      throw errorMessage;
+    }
+  }
+}*/
+
+var Observable = function () {
+  function Observable() {
+    _classCallCheck(this, Observable);
+
+    this._subjects = new Map();
+
+    this.register = register.bind(this);
+    this.notify = notify.bind(this);
+  }
+
+  _createClass(Observable, [{
+    key: "_validate",
+    value: function _validate(target, name) {
+      if (target === null || typeof target === "undefined") {
+        var errorMessage = name + " can not be " + target + "!";
+        throw errorMessage;
+      }
+
+      return target;
+    }
+  }, {
+    key: "subjects",
+    set: function set(subjects) {
+      this._subjects = this._validate(subjects, "subjects");
+    },
+    get: function get() {
+      return this._subjects;
+    }
+  }]);
+
+  return Observable;
+}();
+
+exports.default = Observable;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function validateNullUndifined(target, name, descriptor) {
+  var original = descriptor.value;
+  if (typeof original === 'function') {
+    descriptor.value = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      for (var index = 0; index < args.length; index++) {
+        if (args[index] === null || typeof args[index] === 'undefined') {
+          var error = new TypeError('Argument #' + (index + 1) + ' of function ' + name + ' is: ' + args[index]);
+
+          console.error(name + ': ' + args);
+          console.error(error);
+
+          throw error;
+        }
+      }
+      var result = original.apply(this, args);
+      return result;
+    };
+  }
+  return descriptor;
+}
+
+function validateEmptyString(target, name, descriptor) {
+  var original = descriptor.value;
+  if (typeof original === 'function') {
+    descriptor.value = function () {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      for (var index = 0; index < args.length; index++) {
+        if (args[index] === '') {
+          var error = new TypeError('Argument #' + (index + 1) + ' of function ' + name + ' is an empty string');
+
+          console.error(name + ': ' + args);
+          console.error(error);
+
+          throw error;
+        }
+      }
+      var result = original.apply(this, args);
+      return result;
+    };
+  }
+  return descriptor;
+}
+
+exports.validateNullUndifined = validateNullUndifined;
+exports.validateEmptyString = validateEmptyString;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _observable = __webpack_require__(2);
+
+var _observable2 = _interopRequireDefault(_observable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ID = 0;
+
+var Entity = function () {
+  function Entity() {
+    var components = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Map();
+    var renderer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "entity";
+
+    _classCallCheck(this, Entity);
+
+    this._ID = Entity.obtainID();
+    this._name = this.constructor.name + "_" + this._ID;
+
+    this.components = components;
+    //  this.renderer = renderer;
+    this.observable = new _observable2.default();
+  }
+
+  _createClass(Entity, [{
+    key: "update",
+    value: function update(deltaTime) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _ref = _step.value;
+
+          var _ref2 = _slicedToArray(_ref, 2);
+
+          var key = _ref2[0];
+          var value = _ref2[1];
+
+          value.update(deltaTime);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+  }, {
+    key: "render",
+    value: function render(deltaTime) {
+      /*if (this.renderer !== null) {
+        this.renderer.render(deltaTime);
+      }*/
+    }
+  }, {
+    key: "addComponent",
+    value: function addComponent(name, component) {
+      this.components.set(name, component);
+    }
+  }, {
+    key: "getComponent",
+    value: function getComponent(name) {
+      return this.components.get(name);
+    }
+  }, {
+    key: "ID",
+    get: function get() {
+      return this._ID;
+    }
+  }, {
+    key: "name",
+    get: function get() {
+      return this._name;
+    }
+  }], [{
+    key: "obtainID",
+    value: function obtainID() {
+      return ID++;
+    }
+  }]);
+
+  return Entity;
+}();
+
+exports.default = Entity;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(6);
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _engine = __webpack_require__(1);
+
+var _vector = __webpack_require__(0);
 
 var _vector2 = _interopRequireDefault(_vector);
 
-var _player = __webpack_require__(10);
+var _player = __webpack_require__(12);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -673,7 +787,7 @@ function render(deltaTime) {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -688,19 +802,19 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _desc, _value, _class;
 
-var _observable = __webpack_require__(0);
+var _observable = __webpack_require__(2);
 
 var _observable2 = _interopRequireDefault(_observable);
 
-var _imageLoader = __webpack_require__(7);
+var _imageLoader = __webpack_require__(8);
 
 var _imageLoader2 = _interopRequireDefault(_imageLoader);
 
-var _jsonLoader = __webpack_require__(8);
+var _jsonLoader = __webpack_require__(9);
 
 var _jsonLoader2 = _interopRequireDefault(_jsonLoader);
 
-var _validator = __webpack_require__(1);
+var _validator = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -841,7 +955,7 @@ var AssetManager = (_class = function () {
 exports.default = AssetManager;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -856,7 +970,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _desc, _value, _class;
 
-var _validator = __webpack_require__(1);
+var _validator = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -919,7 +1033,7 @@ var ImageLoader = (_class = function () {
 exports.default = ImageLoader;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -934,7 +1048,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _desc, _value, _class;
 
-var _validator = __webpack_require__(1);
+var _validator = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1003,7 +1117,7 @@ var JSONLoader = (_class = function () {
 exports.default = JSONLoader;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1016,11 +1130,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _observable = __webpack_require__(0);
+var _observable = __webpack_require__(2);
 
 var _observable2 = _interopRequireDefault(_observable);
 
-var _vector = __webpack_require__(2);
+var _vector = __webpack_require__(0);
 
 var _vector2 = _interopRequireDefault(_vector);
 
@@ -1114,7 +1228,111 @@ var InputManager = function () {
 exports.default = InputManager;
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var EntitesManager = function () {
+  function EntitesManager() {
+    _classCallCheck(this, EntitesManager);
+
+    this._entities = new Map();
+    this._groups = new Map();
+  }
+
+  _createClass(EntitesManager, [{
+    key: "add",
+    value: function add(entity) {
+      this._entities.set(entity.name, entity);
+      console.log("Add \"" + entity.name + "\" to entities");
+    }
+  }, {
+    key: "remove",
+    value: function remove(entityName) {
+      if (this._entities.has(entityName)) {
+        this._entities.delete(entityName);
+      } else {
+        console.warn("\"" + entityName + "\" doesn't exists in entities");
+      }
+    }
+  }, {
+    key: "addAtGroup",
+    value: function addAtGroup(entity, groupName) {
+      if (this._groups.has(groupName) == false) {
+        this._groups.set(groupName, new Map());
+        console.warn("Creating group: \"" + groupName + "\".");
+      }
+      this._groups.get(groupName).set(entity.name, entity);
+      this.add(entity);
+    }
+  }, {
+    key: "removeFromGroup",
+    value: function removeFromGroup(entity, groupName) {
+      if (this._groups.has(groupName)) {
+        this.remove(entity);
+        this._groups.delete(entity.name);
+      } else {
+        console.warn("Creating group: \"" + groupName + "\".");
+      }
+    }
+  }, {
+    key: "removeGroup",
+    value: function removeGroup(entity, groupName) {
+      if (this._groups.has(groupName)) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this._groups.keys()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var key = _step.value;
+
+            this.remove(entity);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        this._groups.delete(groupName);
+      } else {
+        console.warn("\"" + groupName + "\" doesn't exists.");
+      }
+    }
+  }, {
+    key: "entities",
+    get: function get() {
+      return this._entities;
+    }
+  }]);
+
+  return EntitesManager;
+}();
+
+exports.default = EntitesManager;
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1127,19 +1345,19 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _entity = __webpack_require__(11);
+var _entity = __webpack_require__(4);
 
 var _entity2 = _interopRequireDefault(_entity);
 
-var _projectile = __webpack_require__(12);
+var _projectile = __webpack_require__(13);
 
 var _projectile2 = _interopRequireDefault(_projectile);
 
-var _vector = __webpack_require__(2);
+var _vector = __webpack_require__(0);
 
 var _vector2 = _interopRequireDefault(_vector);
 
-var _engine = __webpack_require__(3);
+var _engine = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1310,121 +1528,7 @@ var Player = function (_Entity) {
 exports.default = Player;
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = undefined;
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _observable = __webpack_require__(0);
-
-var _observable2 = _interopRequireDefault(_observable);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ID = 0;
-
-var Entity = function () {
-  function Entity() {
-    var components = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Map();
-    var renderer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "entity";
-
-    _classCallCheck(this, Entity);
-
-    this._ID = Entity.obtainID();
-    this._name = this.constructor.name + "_" + this._ID;
-
-    this.components = components;
-    //  this.renderer = renderer;
-    this.observable = new _observable2.default();
-  }
-
-  _createClass(Entity, [{
-    key: "update",
-    value: function update(deltaTime) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this.components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _ref = _step.value;
-
-          var _ref2 = _slicedToArray(_ref, 2);
-
-          var key = _ref2[0];
-          var value = _ref2[1];
-
-          value.update(deltaTime);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    }
-  }, {
-    key: "render",
-    value: function render(deltaTime) {
-      /*if (this.renderer !== null) {
-        this.renderer.render(deltaTime);
-      }*/
-    }
-  }, {
-    key: "addComponent",
-    value: function addComponent(name, component) {
-      this.components.set(name, component);
-    }
-  }, {
-    key: "getComponent",
-    value: function getComponent(name) {
-      return this.components.get(name);
-    }
-  }, {
-    key: "ID",
-    get: function get() {
-      return this._ID;
-    }
-  }, {
-    key: "name",
-    get: function get() {
-      return this._name;
-    }
-  }], [{
-    key: "obtainID",
-    value: function obtainID() {
-      return ID++;
-    }
-  }]);
-
-  return Entity;
-}();
-
-exports.default = Entity;
-
-/***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1437,15 +1541,15 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _entity = __webpack_require__(11);
+var _entity = __webpack_require__(4);
 
 var _entity2 = _interopRequireDefault(_entity);
 
-var _vector = __webpack_require__(2);
+var _vector = __webpack_require__(0);
 
 var _vector2 = _interopRequireDefault(_vector);
 
-var _engine = __webpack_require__(3);
+var _engine = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1527,110 +1631,6 @@ var Projectile = function (_Entity) {
 }(_entity2.default);
 
 exports.default = Projectile;
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var EntitesManager = function () {
-  function EntitesManager() {
-    _classCallCheck(this, EntitesManager);
-
-    this._entities = new Map();
-    this._groups = new Map();
-  }
-
-  _createClass(EntitesManager, [{
-    key: "add",
-    value: function add(entity) {
-      this._entities.set(entity.name, entity);
-      console.log("Add \"" + entity.name + "\" to entities");
-    }
-  }, {
-    key: "remove",
-    value: function remove(entityName) {
-      if (this._entities.has(entityName)) {
-        this._entities.delete(entityName);
-      } else {
-        console.warn("\"" + entityName + "\" doesn't exists in entities");
-      }
-    }
-  }, {
-    key: "addAtGroup",
-    value: function addAtGroup(entity, groupName) {
-      if (this._groups.has(groupName) == false) {
-        this._groups.set(groupName, new Map());
-        console.warn("Creating group: \"" + groupName + "\".");
-      }
-      this._groups.get(groupName).set(entity.name, entity);
-      this.add(entity);
-    }
-  }, {
-    key: "removeFromGroup",
-    value: function removeFromGroup(entity, groupName) {
-      if (this._groups.has(groupName)) {
-        this.remove(entity);
-        this._groups.delete(entity.name);
-      } else {
-        console.warn("Creating group: \"" + groupName + "\".");
-      }
-    }
-  }, {
-    key: "removeGroup",
-    value: function removeGroup(entity, groupName) {
-      if (this._groups.has(groupName)) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = this._groups.keys()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var key = _step.value;
-
-            this.remove(entity);
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-
-        this._groups.delete(groupName);
-      } else {
-        console.warn("\"" + groupName + "\" doesn't exists.");
-      }
-    }
-  }, {
-    key: "entities",
-    get: function get() {
-      return this._entities;
-    }
-  }]);
-
-  return EntitesManager;
-}();
-
-exports.default = EntitesManager;
 
 /***/ })
 /******/ ]);

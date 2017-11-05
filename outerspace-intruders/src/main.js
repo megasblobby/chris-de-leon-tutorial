@@ -1,8 +1,10 @@
 import {engine} from "../src/libraries/engine";
 import Vector2 from "../src/libraries/vector2";
 import Player from "../src/player";
+import EnemiesManager from "../src/enemies-manager";
 
 let player;
+let enemiesManager;
 
 window.onload = () => {
   engine.preload = preload.bind(engine);
@@ -15,6 +17,7 @@ window.onload = () => {
 function preload() {
   this.assetManager.addImage("player", "./media/player.png");
   this.assetManager.addImage("player_projectile", "./media/player-projectile.png");
+  this.assetManager.addImage("enemy", "./media/enemy.png");
 
   this._loadAssets();
 }
@@ -27,13 +30,15 @@ function init() {
   player.sprite = this.assetManager.assets.get("player");
 
   this._entitiesManager.add(player);
+
+  enemiesManager = new EnemiesManager();
+  enemiesManager.createEnemies();
 }
 
 function update(deltaTime) {
   for (let entity of this._entitiesManager.entities.values()) {
     entity.update(deltaTime);
   }
-  //player.update(deltaTime);
 }
 
 function render(deltaTime) {

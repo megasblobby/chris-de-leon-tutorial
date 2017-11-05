@@ -136,12 +136,12 @@ class Engine {
     return this._canvas;
   }
 
-  get inputManager() {
-    return this._inputManager;
-  }
-
   get canvasContext() {
     return this._canvasContext;
+  }
+
+  get inputManager() {
+    return this._inputManager;
   }
 
   get assetManager() {

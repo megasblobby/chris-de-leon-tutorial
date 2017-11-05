@@ -22,10 +22,10 @@ export default class EntitesManager {
 
   addAtGroup(entity, groupName) {
     if (this._groups.has(groupName) == false) {
-      this._groups.set(groupName, new Map());
+      this._groups.set(groupName, new Set());
       console.warn(`Creating group: "${groupName}".`);
     }
-    this._groups.get(groupName).set(entity.name, entity);
+    this._groups.get(groupName).add(entity.name);
     this.add(entity);
   }
 
