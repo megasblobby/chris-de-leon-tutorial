@@ -1,0 +1,11 @@
+{
+  "name":"spaceport",
+  "spawnPoint":{"x":0,"y":0},
+  "imagePath":"media/images/placeholder-spaceport.png",
+  "links":[
+    {"position":{"x":650,"y":300},
+    "sizes":{"x":100,"y":100},
+    "scene":"spaceport-bathroom"}],
+  "characters":["Sblobby"],
+  "interactables":["Computer"]
+}
