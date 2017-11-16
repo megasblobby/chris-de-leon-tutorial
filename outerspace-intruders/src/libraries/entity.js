@@ -39,6 +39,10 @@ export default class Entity {
     return this.components.get(name);
   }
 
+  addTag(name, value) {
+    this._tags.set(name, value);
+  }
+
   get ID() {
     return this._ID;
   }

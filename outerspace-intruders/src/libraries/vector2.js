@@ -2,74 +2,98 @@
 
 export default class Vector2 {
   constructor(x = 0, y = 0) {
-    this.x = x;
-    this.y = y;
+    this._x = x;
+    this._y = y;
   }
 
-  clone() {
-    return new Vector2(this.x, this.y);
+  static add(vectorA, vectorB) {
+    return new Vector2(vectorA.x + vectorB.x, vectorA.y + vectorB.y);
   }
 
-  negate() {
-    this.x *= -1;
-    this.y *= -1;
-  }
-
-  lengthSquared() {
-    return Math.pow(this.x, 2) + Math.pow(this.y, 2);
-  }
-
-  length() {
-    return Math.sqrt(this.lengthSquared());
-  }
-
-  normalize() {
-    let length = this.length();
-    this.x /= length, this.y /= length;
-  }
-
-  normalized() {
-    let length = this.length();
-    return new Vector2(this.x / length, this.y / length);
-  }
-
-  add(vector2) {
-    return new Vector2(this.x + vector2.x, this.y + vector2.y);
-  }
-
-  subtract(vector2) {
-    return new Vector2(this.x - vector2.x, this.y - vector2.y);
-  }
-
-  increment(vector2) {
-    this.x += vector2.x;
-    this.y += vector2.y;
-  }
-
-  decrement(vector2) {
-    this.x -= vector2.x;
-    this.y -= vector2.y;
-  }
-
-  scale(scalar) {
-    this.x *= scalar;
-    this.y *= scalar;
-  }
-
-  scaled(scalar) {
-    return new Vector2( this.x * scalar, this.y * scalar);
-  }
-
-  dot(vector2) {
-    return this.x * vector2.x + this.y + vector2.y;
-  }
-
-  toString() {
-    console.log("[x: " + this.x + ", y: " + this.y + "]");
-    console.log("length: " + this.length());
+  static subtract(vectorA, vectorB) {
+    return new Vector2(vectorA.x - vectorB.x, vectorA.y - vectorB.y);
   }
 
   static distance(vectorA, vectorB) {
     return vectorA.subtract(vectorB).length();
+  }
+
+  clone() {
+    return new Vector2(this._x, this._y);
+  }
+
+  negate() {
+    this._x *= -1;
+    this._y *= -1;
+  }
+
+  normalize() {
+    let length = this.length();
+    this._x /= length, this._y /= length;
+
+    return this;
+  }
+
+  normalized() {
+    let length = this.length();
+    return new Vector2(this._x / length, this._y / length);
+  }
+
+  add(vector2) {
+    this._x += vector2.x;
+    this._y += vector2.y;
+
+    return this;
+  }
+
+  subtract(vector2) {
+    this._x -= vector2.x;
+    this._y -= vector2.y;
+
+    return this;
+  }
+
+  scale(scalar) {
+    this._x *= scalar;
+    this._y *= scalar;
+
+    return this;
+  }
+
+  scaled(scalar) {
+    return new Vector2( this._x * scalar, this._y * scalar);
+  }
+
+  dot(vector2) {
+    return this._x * vector2.x + this._y + vector2.y;
+  }
+
+  toString() {
+    console.log("[x: " + this._x + ", y: " + this._y + "]");
+    console.log("length: " + this.length);
+  }
+
+  set x(newX) {
+    this._x = x;
+  }
+
+  get x() {
+    return this._x;
+  }
+
+  set y(newY) {
+    this._y = y;
+  }
+
+  get y() {
+    return this._y;
+  }
+
+  get length() {
+    return Math.sqrt(this.lengthSquared);
+  }
+
+  get lengthSquared() {
+    return Math.pow(this._x, 2) + Math.pow(this._y, 2);
   }
 }

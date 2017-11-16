@@ -1,10 +1,14 @@
+import "babel-polyfill";
 import {engine} from "../src/libraries/engine";
 import Vector2 from "../src/libraries/vector2";
+import Rectangle from "../src/libraries/rectangle";
+import Quadtree from "../src/libraries/quadtree";
 import Player from "../src/player";
 import EnemiesManager from "../src/enemies-manager";
 
 let player;
 let enemiesManager;
+let quadtree;
 
 window.onload = () => {
   engine.preload = preload.bind(engine);
@@ -33,12 +37,31 @@ function init() {
 
   enemiesManager = new EnemiesManager();
   enemiesManager.createEnemies();
+
+  let position = new Vector2();
+  let sizes = new Vector2(engine.canvasWidth, engine.canvasHeight);
+  let area = new Rectangle(position, sizes);
+  quadtree = new Quadtree(area, 0);
+  for (let i = 0; i < 200; i++) {
+    let x = Math.random() * (engine.canvasWidth);
+    let y = Math.random() * (engine.canvasHeight);
+    let position = new Vector2(x, y);
+
+    let width = Math.random() * (30 - 1) + 1;
+    let height = Math.random() * (30 - 1) + 1
+    let sizes = new Vector2(width, height);
+
+    let rectangle = new Rectangle(position, sizes);
+
+    quadtree.insert(rectangle);
+   }
 }
 
 function update(deltaTime) {
   for (let entity of this._entitiesManager.entities.values()) {
     entity.update(deltaTime);
   }
+  enemiesManager.update(deltaTime);
 }
 
 function render(deltaTime) {
@@ -48,4 +71,6 @@ function render(deltaTime) {
   for (let entity of this._entitiesManager.entities.values()) {
     entity.render(deltaTime);
   }
+
+  quadtree.visualize();
 }

@@ -22,7 +22,7 @@ export default class Enemy extends Entity {
   update(deltaTime) {
     //this._velocity = new Vector2();
 
-    this._position.increment(this._velocity);
+    this._position.add(this._velocity);
   }
 
   render(deltaTime) {

@@ -16,7 +16,7 @@ export default class Projectile extends Entity {
   }
 
   update(deltaTime) {
-    this._position.increment(this._velocity);
+    this._position.add(this._velocity);
   }
 
   render(deltaTime) {

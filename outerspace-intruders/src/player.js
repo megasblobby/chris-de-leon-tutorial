@@ -35,7 +35,7 @@ export default class Player extends Entity {
       this._shoot(deltaTime);
     }
 
-    this._position.increment(this._velocity);
+    this._position.add(this._velocity);
   }
 
   render(deltaTime) {
