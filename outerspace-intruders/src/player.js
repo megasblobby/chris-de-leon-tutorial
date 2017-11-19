@@ -3,6 +3,7 @@
 import Entity from "./libraries/entity";
 import Projectile from "./projectile";
 import Vector2 from "./libraries/vector2";
+import BoundingBox from "./libraries/bounding-box";
 import {engine} from "./libraries/engine";
 
 const MOVE_LEFT = "ArrowLeft";
@@ -18,6 +19,7 @@ export default class Player extends Entity {
     this._speed = new Vector2();
     this._canvasContext = null;
     this._sprite = null;
+    this._boundingBox = new BoundingBox();
     this._fireRatio = 0.5;
     this._elpasedTimeFromLastShoot = this._fireRatio;
   }
@@ -35,11 +37,11 @@ export default class Player extends Entity {
       this._shoot(deltaTime);
     }
 
-    this._position.add(this._velocity);
+    this._boundingBox.position.add(this._velocity);
   }
 
   render(deltaTime) {
-    this.canvasContext.drawImage(this._sprite, this._position.x, this._position.y);
+    this.canvasContext.drawImage(this._sprite,  this._boundingBox.position.x,  this._boundingBox.position.y);
   }
 
   _shoot(deltaTime) {
@@ -56,7 +58,7 @@ export default class Player extends Entity {
 
   _createProjectile() {
     let projectile = new Projectile();
-    projectile.position = this._position.clone();
+    projectile.position = this._boundingBox.position.clone();
     projectile.speed = new Vector2(200, 0);
     projectile.velocity = UP.clone();
     projectile.canvasContext = this._canvasContext;
@@ -65,12 +67,12 @@ export default class Player extends Entity {
     return projectile;
   }
 
-  set position(newPosition) {
-    this._position = newPosition;
+  set position(_position) {
+    this._boundingBox.position = _position.clone();
   }
 
   get position() {
-    return this._position;
+    return this._boundingBox.position.clone();
   }
 
   set velocity(newVelocity) {
@@ -103,6 +105,14 @@ export default class Player extends Entity {
 
   get sprite() {
     return this._sprite;
+  }
+
+  set boundingBox(_boundingBox) {
+    return this._boundingBox = _boundingBox;
+  }
+
+  get boundingBox() {
+    return this._boundingBox;
   }
 
   /*onNotify (subject, object) {

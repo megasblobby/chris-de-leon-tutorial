@@ -73,16 +73,16 @@ export default class Vector2 {
     console.log("length: " + this.length);
   }
 
-  set x(newX) {
-    this._x = x;
+  set x(_x) {
+    this._x = _x;
   }
 
   get x() {
     return this._x;
   }
 
-  set y(newY) {
-    this._y = y;
+  set y(_y) {
+    this._y = _y;
   }
 
   get y() {

@@ -18,21 +18,28 @@ export default class Quadtree {
   }
 
   clear() {
-    if (nodes.lengh > 0)
-    for (let node of this._nodes()) {
-      node.clear;
+    /*if (this._nodes.lenght > 0) {
+      for (let index = 0; index < this._nodes.length; index++) {
+        this._nodes[index].clear();
+        this._nodes.
+      }
+      while (this._nodes.length.)
+    }*/
+    if (this._level === 0) {
+      this._nodes.length = 0;
+      this._objects.length = 0;
     }
   }
 
-  insert(rectangle) {
+  insert(boundingBox) {
     if (this._nodes.length > 0) {
-      let index = this._getIndexNode(rectangle);
+      let index = this._getIndexNode(boundingBox);
       if (index !== -1) {
-        this._nodes[index].insert(rectangle);
+        this._nodes[index].insert(boundingBox);
       }
     }
     else {
-      this._objects.push(rectangle);
+      this._objects.push(boundingBox);
       if (this._objects.length > MAX_OBJECTS_PER_NODE &&
         this._level < MAX_LEVEL) {
           if (this._nodes.length === 0) {
@@ -78,10 +85,10 @@ export default class Quadtree {
     this._nodes.push(new Quadtree(areaNodeD, level));
   }
 
-  _getIndexNode(rectangle) {
+  _getIndexNode(boundingBox) {
     let index = PARENT;
     for (let i = 0; i < this._nodes.length; i++) {
-      if (this._nodes[i].area.contains(rectangle)) {
+      if (this._nodes[i].area.contains(boundingBox)) {
         index = i;
         return index;
       }
@@ -89,21 +96,18 @@ export default class Quadtree {
     return index;
   }
 
-  visualize() {
-    engine.canvasContext.strokeStyle = 'red';
+  render(deltaTime) {
+    engine.canvasContext.strokeStyle = '#FF0000';
     engine.canvasContext.strokeRect(this._area.leftTopCorner.x,
                                   this._area.leftTopCorner.y,
                                   this._area.width, this._area.height);
 
     for (let object of this._objects) {
-      engine.canvasContext.strokeStyle = 'green';
-      engine.canvasContext.strokeRect(object.leftTopCorner.x,
-                                    object.leftTopCorner.y,
-                                    object.width, object.height);
+      object.render(deltaTime);
     }
 
     for (let node of this._nodes) {
-      node.visualize();
+      node.render(deltaTime);
     }
   }
 

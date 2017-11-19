@@ -2,6 +2,7 @@
 
 import Enemy from "./enemy";
 import Vector2 from "./libraries/vector2";
+import BoundingBox from "./libraries/bounding-box";
 import {engine} from "./libraries/engine";
 
 const ROWS = 5;
@@ -47,7 +48,7 @@ export default class EnemiesManager {
       this._enemies.set(`row_${row}`, new Map());
       for (let column = 0; column < COLUMNS; column++) {
         let enemy = this._createEnemy(row, column);
-        enemy.addTag('row', row);
+        enemy.tagManager.add('row', row);
         this._enemies.get(`row_${row}`).set(enemy.name, enemy);
         engine.entitiesManager.addAtGroup(enemy, "enemies");
       }
@@ -60,7 +61,9 @@ export default class EnemiesManager {
     let x = STARTING_POSITION.x + (column * GAP);
     let y = STARTING_POSITION.y + (row * GAP);
     let position = new Vector2(x, y);
-    enemy.position = position;
+
+    enemy.boundingBox = new BoundingBox(position, new Vector2(14, 15));
+
 
     enemy.speed = SPEED.clone();
     enemy.velocity = RIGHT.clone();

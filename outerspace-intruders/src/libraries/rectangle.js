@@ -102,7 +102,7 @@ export default class Rectangle {
   }
 
   get center() {
-    return Vector2.add(this.leftTopCorner, this.halfSizes);
+    return new Vector2.add(this.leftTopCorner, this.halfSizes);
   }
 
   get points() {

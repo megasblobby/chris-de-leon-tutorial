@@ -3,6 +3,7 @@
 import Entity from "./libraries/entity";
 import Projectile from "./projectile";
 import Vector2 from "./libraries/vector2";
+import BoundingBox from "./libraries/bounding-box";
 import {engine} from "./libraries/engine";
 
 const DOWN = new Vector2(0, 1);
@@ -15,6 +16,7 @@ export default class Enemy extends Entity {
     this._speed = new Vector2();
     this._canvasContext = null;
     this._sprite = null;
+    this._boundingBox = new BoundingBox();
     this._fireRatio = 0.5;
     this._elpasedTimeFromLastShoot = this._fireRatio;
   }
@@ -22,11 +24,11 @@ export default class Enemy extends Entity {
   update(deltaTime) {
     //this._velocity = new Vector2();
 
-    this._position.add(this._velocity);
+    this.position.add(this._velocity);
   }
 
   render(deltaTime) {
-    this.canvasContext.drawImage(this._sprite, this._position.x, this._position.y);
+    this.canvasContext.drawImage(this._sprite, this._boundingBox.position.x, this._boundingBox.position.y);
   }
 
   /*_shoot(deltaTime) {
@@ -52,12 +54,12 @@ export default class Enemy extends Entity {
     return projectile;
   }*/
 
-  set position(newPosition) {
-    this._position = newPosition;
+  set position(_position) {
+    this._boundingBox.position = _position.clone();
   }
 
   get position() {
-    return this._position;
+    return this._boundingBox.position;
   }
 
   set velocity(newVelocity) {
@@ -90,5 +92,13 @@ export default class Enemy extends Entity {
 
   get sprite() {
     return this._sprite;
+  }
+
+  set boundingBox(_boundingBox) {
+    return this._boundingBox = _boundingBox;
+  }
+
+  get boundingBox() {
+    return this._boundingBox;
   }
 }

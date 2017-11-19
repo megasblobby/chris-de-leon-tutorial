@@ -2,6 +2,7 @@ import "babel-polyfill";
 import {engine} from "../src/libraries/engine";
 import Vector2 from "../src/libraries/vector2";
 import Rectangle from "../src/libraries/rectangle";
+import BoundingBox from "../src/libraries/bounding-box";
 import Quadtree from "../src/libraries/quadtree";
 import Player from "../src/player";
 import EnemiesManager from "../src/enemies-manager";
@@ -29,6 +30,9 @@ function preload() {
 function init() {
   player = new Player();
   player.position = new Vector2(100, 100);
+  player.boundingBox = new BoundingBox(new Vector2(100, 100), new Vector2(10, 15));
+  player.boundingBox.color = '#0000FF';
+
   player.speed = new Vector2(100, 0);
   player.canvasContext = this._canvasContext;
   player.sprite = this.assetManager.assets.get("player");
@@ -38,23 +42,18 @@ function init() {
   enemiesManager = new EnemiesManager();
   enemiesManager.createEnemies();
 
+  let enemies =  this.entitiesManager.getGroup('enemies');
+
   let position = new Vector2();
   let sizes = new Vector2(engine.canvasWidth, engine.canvasHeight);
   let area = new Rectangle(position, sizes);
   quadtree = new Quadtree(area, 0);
-  for (let i = 0; i < 200; i++) {
-    let x = Math.random() * (engine.canvasWidth);
-    let y = Math.random() * (engine.canvasHeight);
-    let position = new Vector2(x, y);
+  /*for (let i = 0; i < enemies.length; i++) {
 
-    let width = Math.random() * (30 - 1) + 1;
-    let height = Math.random() * (30 - 1) + 1
-    let sizes = new Vector2(width, height);
-
-    let rectangle = new Rectangle(position, sizes);
-
-    quadtree.insert(rectangle);
+    quadtree.insert(enemies[i].boundingBox);
    }
+
+   quadtree.insert(player.boundingBox);*/
 }
 
 function update(deltaTime) {
@@ -62,6 +61,19 @@ function update(deltaTime) {
     entity.update(deltaTime);
   }
   enemiesManager.update(deltaTime);
+  updateQuadtree(deltaTime);
+}
+
+function updateQuadtree(deltaTime) {
+  let enemies =  engine.entitiesManager.getGroup('enemies');
+  quadtree.clear();
+
+  for (let i = 0; i < enemies.length; i++) {
+
+    quadtree.insert(enemies[i].boundingBox);
+   }
+
+   quadtree.insert(player.boundingBox);
 }
 
 function render(deltaTime) {
@@ -72,5 +84,5 @@ function render(deltaTime) {
     entity.render(deltaTime);
   }
 
-  quadtree.visualize();
+  quadtree.render(deltaTime);
 }

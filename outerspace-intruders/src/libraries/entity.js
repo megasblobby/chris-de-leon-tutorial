@@ -1,16 +1,17 @@
 "use strict";
 
 import Observable from "./observable";
+import TagManager from "./tag-manager";
 
 let ID = 0;
 
 export default class Entity {
   constructor(components = new Map(), renderer = null, name = "entity") {
+    this.components = components;
     this._ID = Entity.obtainID();
     this._name = `${this.constructor.name}_${this._ID}`;
-    this._tags = new Map();
+    this._tagManager = new TagManager();
 
-    this.components = components;
   //  this.renderer = renderer;
     this.observable = new Observable();
   }
@@ -51,7 +52,7 @@ export default class Entity {
     return this._name;
   }
 
-  get tags() {
-    return this._tags;
+  get tagManager() {
+    return this._tagManager;
   }
 }
