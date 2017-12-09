@@ -15,7 +15,16 @@ export default class Vector2 {
   }
 
   static distance(vectorA, vectorB) {
-    return vectorA.subtract(vectorB).length();
+    return Vector2.subtract(vectorA, vectorB).length();
+  }
+
+  static multiply(vectorA, vectorB) {
+    return new Vector2(vectorA.x * vectorB.x, vectorA.y * vectorB.y);
+  }
+
+  copy(vector2) {
+    this._x = vector2.x;
+    this._y = vector2.y;
   }
 
   clone() {
@@ -53,6 +62,13 @@ export default class Vector2 {
     return this;
   }
 
+  multiply(vector2) {
+    this._x *= vector2.x;
+    this._y *= vector2.y;
+
+    return this;
+  }
+
   scale(scalar) {
     this._x *= scalar;
     this._y *= scalar;
@@ -69,8 +85,8 @@ export default class Vector2 {
   }
 
   toString() {
-    console.log("[x: " + this._x + ", y: " + this._y + "]");
-    console.log("length: " + this.length);
+    let description = `[x: ${this._x}, y: ${this._y}] length: ${this.length}`;
+    return description;
   }
 
   set x(_x) {

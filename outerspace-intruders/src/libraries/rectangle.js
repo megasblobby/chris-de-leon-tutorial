@@ -33,16 +33,16 @@ export default class Rectangle {
     return true;
   }
 
-  set position(newPosition) {
-    this._position = newPosition.clone();
+  set position(_position) {
+    this._position = _position.clone();
   }
 
   get position() {
     return this._position;
   }
 
-  set sizes(newSizes) {
-    this._sizes = newSize.clone();
+  set sizes(_sizes) {
+    this._sizes = _sizes.clone();
   }
 
   get sizes() {

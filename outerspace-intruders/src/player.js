@@ -4,12 +4,14 @@ import Entity from "./libraries/entity";
 import Projectile from "./projectile";
 import Vector2 from "./libraries/vector2";
 import BoundingBox from "./libraries/bounding-box";
+import ObjectsPool from "./libraries/objects-pool.js"
 import {engine} from "./libraries/engine";
 
 const MOVE_LEFT = "ArrowLeft";
 const MOVE_RIGHT = "ArrowRight";
 const SHOOT = "z";
 const UP = new Vector2(0, -1);
+const SPEED = new Vector2(0, 2);
 
 export default class Player extends Entity {
   constructor() {
@@ -22,6 +24,7 @@ export default class Player extends Entity {
     this._boundingBox = new BoundingBox();
     this._fireRatio = 0.5;
     this._elpasedTimeFromLastShoot = this._fireRatio;
+    this._projectilesPool = new ObjectsPool(Projectile, 10);
   }
 
   update(deltaTime) {
@@ -45,25 +48,27 @@ export default class Player extends Entity {
   }
 
   _shoot(deltaTime) {
-      if (this._elpasedTimeFromLastShoot > this._fireRatio) {
+      this._elpasedTimeFromLastShoot += deltaTime;
+      if (this._elpasedTimeFromLastShoot >= this._fireRatio) {
         this._elpasedTimeFromLastShoot = 0;
 
         let projectile = this._createProjectile();
         engine.entitiesManager.addAtGroup(projectile, "player_projectiles");
       }
-      else {
-        this._elpasedTimeFromLastShoot += deltaTime;
-      }
   }
 
   _createProjectile() {
-    let projectile = new Projectile();
-    projectile.position = this._boundingBox.position.clone();
-    projectile.speed = new Vector2(200, 0);
-    projectile.velocity = UP.clone();
+    let projectile = this._projectilesPool.getObject();
+    //projectile.position.copy(this._boundingBox.position);
+    projectile.speed.copy(SPEED);
+    projectile.velocity.copy(UP);
     projectile.canvasContext = this._canvasContext;
     projectile.sprite = engine.assetManager.assets.get("player_projectile");
-
+    projectile.sprite.isActive = true;
+    projectile.boundingBox.position.copy(this._boundingBox.position);
+    projectile.boundingBox.sizes.copy(new Vector2(3, 9));
+    projectile.boundingBox.tagManager.add('entityType', 'player_projectile')
+    projectile.boundingBox.tagManager.add('ID', projectile.ID);
     return projectile;
   }
 

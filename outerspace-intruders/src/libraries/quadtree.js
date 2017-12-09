@@ -4,52 +4,49 @@ import Vector2 from "./vector2";
 import Rectangle from "./rectangle";
 import {engine} from "./engine";
 
-const MAX_OBJECTS_PER_NODE = 10;
-const MAX_LEVEL = 5;
+export const DEFAULT_MAX_OBJECTS_PER_NODE = 10;
+export const DEFAULT_MAX_LEVELS = 5;
 const PARENT = -1;
 const AREA_NODE_A = 0, AREA_NODE_B = 1, AREA_NODE_C = 2, AREA_NODE_D = 3;
 
 export default class Quadtree {
-  constructor(area = new Rectangle(), level = 0) {
+  constructor(area = new Rectangle(), level = 0,
+              maxObjectsPerNode = DEFAULT_MAX_OBJECTS_PER_NODE,
+              maxLevels = DEFAULT_MAX_LEVELS) {
     this._area = area;
     this._level = level;
+    this._maxObjectsPerNode = maxObjectsPerNode;
+    this._maxLevels = maxLevels;
     this._objects = new Array();
     this._nodes = new Array();
+    this._returnObjects = new Array();
   }
 
   clear() {
-    /*if (this._nodes.lenght > 0) {
-      for (let index = 0; index < this._nodes.length; index++) {
-        this._nodes[index].clear();
-        this._nodes.
-      }
-      while (this._nodes.length.)
-    }*/
     if (this._level === 0) {
       this._nodes.length = 0;
       this._objects.length = 0;
+      this._returnObjects.length = 0;
     }
   }
 
   insert(boundingBox) {
     if (this._nodes.length > 0) {
       let index = this._getIndexNode(boundingBox);
-      if (index !== -1) {
+      if (index !== PARENT) {
         this._nodes[index].insert(boundingBox);
       }
     }
     else {
       this._objects.push(boundingBox);
-      if (this._objects.length > MAX_OBJECTS_PER_NODE &&
-        this._level < MAX_LEVEL) {
+      if (this._objects.length > this._maxObjectsPerNode &&
+        this._level < this._maxLevels) {
           if (this._nodes.length === 0) {
             this._split();
-            console.log("splitty-cash");
           }
           for (let i = 0; i < this._objects.length; i++) {
             let index = this._getIndexNode(this._objects[i]);
-            console.log(`index ${index}`);
-            if (index !== -1) {
+            if (index !== PARENT) {
               this._nodes[index].insert(this._objects[i]);
               this._objects.splice(i, 1);
               i--;
@@ -58,6 +55,19 @@ export default class Quadtree {
         }
       }
     }
+
+    retrieve(boundingBox) {
+      let index = this._getIndexNode(boundingBox);
+      let objects = null;
+      if (index !== PARENT && this._nodes.length > 0) {
+        objects = this._nodes[index].retrieve(boundingBox);
+      }
+
+      Array.prototype.push.apply(this._returnObjects, objects);
+      Array.prototype.push.apply(this._returnObjects, this._objects);
+
+      return this._returnObjects;
+   }
 
   _split() {
     let level = this._level + 1;
@@ -117,6 +127,14 @@ export default class Quadtree {
 
   get level() {
     return this._level;
+  }
+
+  get maxObjectsPerNode() {
+    return this._maxObjectsPerNode;
+  }
+
+  get maxLevels() {
+    return this._maxLevels;
   }
 
   get objects() {

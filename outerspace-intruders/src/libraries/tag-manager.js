@@ -16,6 +16,10 @@ export default class TagManager {
     return null;
   }
 
+  has(tag) {
+    return this._tags.has(tag);
+  }
+
   get tags() {
     return this._tags;
   }

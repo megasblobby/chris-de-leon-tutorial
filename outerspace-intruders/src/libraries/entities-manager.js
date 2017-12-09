@@ -11,9 +11,9 @@ export default class EntitesManager {
     console.log(`Add "${entity.name}" to entities`);
   }
 
-  remove(entityName) {
-    if (this._entities.has(entityName)) {
-      this._entities.delete(entityName)
+  remove(entity) {
+    if (this._entities.has(entity.name)) {
+      this._entities.delete(entity.name)
     }
     else {
       console.warn(`"${entityName}" doesn't exists in entities`);

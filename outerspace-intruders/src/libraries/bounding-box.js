@@ -28,6 +28,17 @@ export default class BoundingBox extends Rectangle {
                                   this.width, this.height);
   }
 
+  intersect(boundingBox) {
+    for (let point of boundingBox.points) {
+      if (this.containsPoint(point)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  onCollision(boundingBox) {}
+
   get tagManager() {
     return this._tagManager;
   }

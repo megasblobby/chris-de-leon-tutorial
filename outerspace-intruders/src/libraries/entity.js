@@ -13,7 +13,8 @@ export default class Entity {
     this._tagManager = new TagManager();
 
   //  this.renderer = renderer;
-    this.observable = new Observable();
+    this._observable = new Observable();
+    this._isActive = false;
   }
 
   static obtainID() {
@@ -54,5 +55,17 @@ export default class Entity {
 
   get tagManager() {
     return this._tagManager;
+  }
+
+  get observable() {
+    return this._observable;
+  }
+
+  set isActive(_isActive) {
+    this._isActive = _isActive;
+  }
+
+  get isActive() {
+    return this._isActive;
   }
 }

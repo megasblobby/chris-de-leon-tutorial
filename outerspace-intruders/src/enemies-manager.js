@@ -5,14 +5,14 @@ import Vector2 from "./libraries/vector2";
 import BoundingBox from "./libraries/bounding-box";
 import {engine} from "./libraries/engine";
 
-const ROWS = 5;
-const COLUMNS = 10;
+const ROWS = 8;
+const COLUMNS = 15;
 const RIGHT = new Vector2(1, 0);
 const LEFT = new Vector2(-1, 0);
 const DOWN = new Vector2(0, 1);
-const GAP = 20;
+const GAP = 30;
 const STARTING_POSITION = new Vector2(10, 10);
-const ENDING_POSITION = new Vector2(380, 10);
+const ENDING_POSITION = new Vector2(780, 10);
 const MIN_X = STARTING_POSITION.x;
 const MAX_X = STARTING_POSITION.x;
 const SPEED = new Vector2(50, 50);
@@ -27,7 +27,7 @@ function* moveDown(deltaTime) {
   yield y;
 
   while (y < finalY) {
-    console.log("SPEED:" + y);
+    //console.log("SPEED:" + y);
 
     y += velocity.add(speed.scaled(yield)).y;
   }
@@ -49,6 +49,7 @@ export default class EnemiesManager {
       for (let column = 0; column < COLUMNS; column++) {
         let enemy = this._createEnemy(row, column);
         enemy.tagManager.add('row', row);
+        enemy.tagManager.add('entityType', 'enemy');
         this._enemies.get(`row_${row}`).set(enemy.name, enemy);
         engine.entitiesManager.addAtGroup(enemy, "enemies");
       }
@@ -63,8 +64,8 @@ export default class EnemiesManager {
     let position = new Vector2(x, y);
 
     enemy.boundingBox = new BoundingBox(position, new Vector2(14, 15));
-
-
+    enemy.boundingBox.tagManager.add('ID', enemy.ID);
+    enemy.boundingBox.tagManager.add('entityType', 'enemy');
     enemy.speed = SPEED.clone();
     enemy.velocity = RIGHT.clone();
     enemy.canvasContext = engine.canvasContext;

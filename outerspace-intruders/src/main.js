@@ -29,14 +29,15 @@ function preload() {
 
 function init() {
   player = new Player();
-  player.position = new Vector2(100, 100);
-  player.boundingBox = new BoundingBox(new Vector2(100, 100), new Vector2(10, 15));
+  player.position = new Vector2(295, 750);
+  player.boundingBox = new BoundingBox(new Vector2(395, 550), new Vector2(10, 15));
+  player.boundingBox.tagManager.add('ID', player.ID);
   player.boundingBox.color = '#0000FF';
 
   player.speed = new Vector2(100, 0);
   player.canvasContext = this._canvasContext;
   player.sprite = this.assetManager.assets.get("player");
-
+  player.boundingBox.tagManager.add('entityType', 'player')
   this._entitiesManager.add(player);
 
   enemiesManager = new EnemiesManager();
@@ -48,12 +49,6 @@ function init() {
   let sizes = new Vector2(engine.canvasWidth, engine.canvasHeight);
   let area = new Rectangle(position, sizes);
   quadtree = new Quadtree(area, 0);
-  /*for (let i = 0; i < enemies.length; i++) {
-
-    quadtree.insert(enemies[i].boundingBox);
-   }
-
-   quadtree.insert(player.boundingBox);*/
 }
 
 function update(deltaTime) {
@@ -66,14 +61,44 @@ function update(deltaTime) {
 
 function updateQuadtree(deltaTime) {
   let enemies =  engine.entitiesManager.getGroup('enemies');
+  let playerProjectiles = engine.entitiesManager.getGroup('player_projectiles');
   quadtree.clear();
 
   for (let i = 0; i < enemies.length; i++) {
 
     quadtree.insert(enemies[i].boundingBox);
    }
+   if (playerProjectiles !== undefined) {
+     for (let i = 0; i < playerProjectiles.length; i++) {
+
+       quadtree.insert(playerProjectiles[i].boundingBox);
+      }
+   }
 
    quadtree.insert(player.boundingBox);
+   //let returnObjects = quadtree.retrieve(player.boundingBox);
+   // for (let object of returnObjects) {
+   //   console.log(object.tagManager.valueOf('ID'));
+   // }
+   handleCollisions(deltaTime);
+}
+
+function handleCollisions(deltaTime) {
+  let playerProjectiles = engine.entitiesManager.getGroup('player_projectiles');
+  if (playerProjectiles !== undefined) {
+    for (let playerProjectile of playerProjectiles) {
+       let returnObjects = quadtree.retrieve(playerProjectile.boundingBox);
+       for (let object of returnObjects) {
+         if(object.tagManager.valueOf("ID") === playerProjectile.ID) {
+           continue;
+         }
+         if (playerProjectile.boundingBox.intersect(object)) {
+             playerProjectile.boundingBox.onCollision(object);
+             object.onCollision(playerProjectile.boundingBox);
+        }
+      }
+    }
+  }
 }
 
 function render(deltaTime) {
