@@ -18,16 +18,16 @@ export default class Rectangle {
   }
 
   containsPoint(point) {
-    if (point.x < this.minX) {
+    if (point.x <= this.minX) {
       return false;
     }
-    if (point.x > this.maxX) {
+    if (point.x >= this.maxX) {
       return false;
     }
-    if (point.y < this.minY) {
+    if (point.y <= this.minY) {
       return false;
     }
-    if (point.y > this.maxY) {
+    if (point.y >= this.maxY) {
       return false;
     }
     return true;

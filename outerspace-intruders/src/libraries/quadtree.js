@@ -1,73 +1,75 @@
 "use strict"
 
 import Vector2 from "./vector2";
-import Rectangle from "./rectangle";
+import BoundingBox from "./bounding-box";
 import {engine} from "./engine";
 
 export const DEFAULT_MAX_OBJECTS_PER_NODE = 10;
-export const DEFAULT_MAX_LEVELS = 5;
+export const DEFAULT_MAX_LEVELS = 4;
+export const DEFAULT_NAME = 'root';
+const NODE_NAME = 'leaf'
 const PARENT = -1;
 const AREA_NODE_A = 0, AREA_NODE_B = 1, AREA_NODE_C = 2, AREA_NODE_D = 3;
 
 export default class Quadtree {
-  constructor(area = new Rectangle(), level = 0,
+  constructor(area = new BoundingBox(), level = 0, name = DEFAULT_NAME,
               maxObjectsPerNode = DEFAULT_MAX_OBJECTS_PER_NODE,
               maxLevels = DEFAULT_MAX_LEVELS) {
     this._area = area;
+    this._area.tagManager.add('name', name);
     this._level = level;
     this._maxObjectsPerNode = maxObjectsPerNode;
     this._maxLevels = maxLevels;
     this._objects = new Array();
     this._nodes = new Array();
-    this._returnObjects = new Array();
   }
 
   clear() {
     if (this._level === 0) {
       this._nodes.length = 0;
       this._objects.length = 0;
-      this._returnObjects.length = 0;
     }
   }
 
   insert(boundingBox) {
     if (this._nodes.length > 0) {
-      let index = this._getIndexNode(boundingBox);
-      if (index !== PARENT) {
-        this._nodes[index].insert(boundingBox);
-      }
+      let indeces = this._getIndecesNode(boundingBox);
+      this._insertObjectAtIndeces(indeces, boundingBox);
     }
     else {
       this._objects.push(boundingBox);
-      if (this._objects.length > this._maxObjectsPerNode &&
-        this._level < this._maxLevels) {
-          if (this._nodes.length === 0) {
-            this._split();
-          }
-          for (let i = 0; i < this._objects.length; i++) {
-            let index = this._getIndexNode(this._objects[i]);
-            if (index !== PARENT) {
-              this._nodes[index].insert(this._objects[i]);
-              this._objects.splice(i, 1);
-              i--;
-            }
-          }
+      if (this._shouldSplit()) {
+        this._split();
+
+        for (let index = 0; index < this._objects.length; index++) {
+          let indeces = this._getIndecesNode(this._objects[index]);
+          this._insertObjectAtIndeces(indeces, this._objects[index]);
+          this._objects.splice(index, 1);
+          index--;
         }
       }
     }
+  }
 
-    retrieve(boundingBox) {
-      let index = this._getIndexNode(boundingBox);
-      let objects = null;
+  retrieve(boundingBox) {
+    let indeces = this._getIndecesNode(boundingBox);
+    let objects = null;
+    let nearObjects = new Set();
+
+    //console.log(this.name);
+    for (let index of indeces) {
       if (index !== PARENT && this._nodes.length > 0) {
         objects = this._nodes[index].retrieve(boundingBox);
+        objects.forEach(object => {//console.log(object.tagManager.valueOf('name'));
+        nearObjects.add(object)});
       }
+    }
 
-      Array.prototype.push.apply(this._returnObjects, objects);
-      Array.prototype.push.apply(this._returnObjects, this._objects);
-
-      return this._returnObjects;
-   }
+    if (this._objects.length > 0) {
+      this._objects.forEach(object => nearObjects.add(object));
+    }
+    return nearObjects;
+  }
 
   _split() {
     let level = this._level + 1;
@@ -80,30 +82,50 @@ export default class Quadtree {
     * | C | D |  *  | 2 | 3 | *
     * ─────────  *  ───────── *
     ***************************/
-    let areaNodeA = new Rectangle(this._area.leftTopCorner.clone(),
+    let areaNodeA = new BoundingBox(this._area.leftTopCorner.clone(),
                                   halfSizes.clone());
-    let areaNodeB = new Rectangle(new Vector2(this._area.center.x,
+    let areaNodeB = new BoundingBox(new Vector2(this._area.center.x,
                                   this._area.minY), halfSizes.clone());
-    let areaNodeC = new Rectangle(new Vector2(this._area.minX,
+    let areaNodeC = new BoundingBox(new Vector2(this._area.minX,
                                   this._area.center.y), halfSizes.clone());
 
-    let areaNodeD = new Rectangle(this._area.center, halfSizes.clone());
+    let areaNodeD = new BoundingBox(this._area.center, halfSizes.clone());
+    let parentName = this.name;
 
-    this._nodes.push(new Quadtree(areaNodeA, level));
-    this._nodes.push(new Quadtree(areaNodeB, level));
-    this._nodes.push(new Quadtree(areaNodeC, level));
-    this._nodes.push(new Quadtree(areaNodeD, level));
+    this._nodes.push(new Quadtree(areaNodeA, level,
+      `${parentName}_${NODE_NAME}_${AREA_NODE_A}`));
+    this._nodes.push(new Quadtree(areaNodeB, level,
+      `${parentName}_${NODE_NAME}_${AREA_NODE_B}`));
+    this._nodes.push(new Quadtree(areaNodeC, level,
+      `${parentName}_${NODE_NAME}_${AREA_NODE_C}`));
+    this._nodes.push(new Quadtree(areaNodeD, level,
+      `${parentName}_${NODE_NAME}_${AREA_NODE_D}`));
   }
 
-  _getIndexNode(boundingBox) {
-    let index = PARENT;
-    for (let i = 0; i < this._nodes.length; i++) {
-      if (this._nodes[i].area.contains(boundingBox)) {
-        index = i;
-        return index;
+  _getIndecesNode(boundingBox) {
+    let indeces = new Set();
+
+    if (this._nodes.length === 0) {
+      indeces.add(PARENT);
+      return indeces;
+    }
+    for (let index = 0; index < this._nodes.length; index++) {
+      if (this._nodes[index].area.intersect(boundingBox)) {
+        indeces.add(index);
       }
     }
-    return index;
+    return indeces;
+  }
+
+  _insertObjectAtIndeces(indeces, object) {
+    for (let index of indeces) {
+      this._nodes[index].insert(object);
+    }
+  }
+
+  _shouldSplit() {
+    return this._objects.length > this._maxObjectsPerNode &&
+          this._level < this._maxLevels - 1;
   }
 
   render(deltaTime) {
@@ -127,6 +149,10 @@ export default class Quadtree {
 
   get level() {
     return this._level;
+  }
+
+  get name() {
+    return this.area.tagManager.valueOf('name');
   }
 
   get maxObjectsPerNode() {
